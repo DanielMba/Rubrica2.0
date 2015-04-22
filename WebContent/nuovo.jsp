@@ -7,7 +7,7 @@
 <title>Crea Contatto</title>
 </head>
 	<body>
-		<form action="/CreaContatto" method="post">
+		<form action="/RubricaTomcat/CreaContatto" method="post">
 			<div style="color: #FF0000;">${messaggioErrore}</div>
 			Nome:<br>
 			<input type="text" name="nome"><br>	

@@ -1,6 +1,7 @@
 package lib;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,6 +22,7 @@ public class Database {
 	private static Context context = null;
 	private static DataSource datasource = null;
 	private static ResultSet resultSet = null;
+	private static PreparedStatement prp_statment = null;
 	
 	
 
@@ -55,7 +57,7 @@ public class Database {
     }
 
 
-	//inizializzo il connessione al db
+	//inizializzo la connessione al db
 	private static void inizializza() {
 		try {
 			context = new InitialContext();
@@ -75,20 +77,30 @@ public class Database {
 	        
 	    	try{
 	    		
-	    		String nome = p.getNome();
-	    		String cognome = p.getCognome();
-	    		String indirizzo = p.getIndirizzo();
-	    		String telefono = p.getTelefono();
-	    		int eta = p.getEta();
+	    		String persona_nome = p.getNome();
+	    		String persona_cognome = p.getCognome();
+	    		String persona_indirizzo = p.getIndirizzo();
+	    		String persona_telefono = p.getTelefono();
+	    		int persona_eta = p.getEta();
 	    		
-	    		String query = 	"INSERT INTO persona"
-	    					  + "VALUES("+ "" +nome + cognome + indirizzo + telefono + eta + ")";	    				
-	    		resultSet = statement.executeQuery(query);
+	    		String query = 	"INSERT INTO persona (id, nome, cognome, indirizzo, telefono, eta)"
+	    						+ "VALUES (?,?,?,?,?,?)";					
+	 
+	    		prp_statment = connect.prepareStatement(query);
+	    		prp_statment.setString(1,null);
+	    		prp_statment.setString(2,persona_nome);
+	    		prp_statment.setString(3,persona_cognome);
+	    		prp_statment.setString(4,persona_indirizzo);
+	    		prp_statment.setString(5,persona_telefono);
+	    		prp_statment.setInt(6,persona_eta);	    		
+	    		prp_statment.executeUpdate();   		
 	    		
-	    	}catch(SQLException sql){    		
+	    		
+	    	}catch(SQLException sql){ 
+	    		System.out.println(sql.getMessage());
 	    		sql.printStackTrace();
 	    	}finally {            
-	            statement.close();
+	    		prp_statment.close();
 	            connect.close();
 	        }    	
 	    }
@@ -115,7 +127,7 @@ public class Database {
     						"eta = "+ eta + 
     						"WHERE id = "+ id;
     					     				
-    		resultSet = statement.executeQuery(query);
+    		statement.executeUpdate(query);
     		
     	}catch(SQLException sql){    		
     		sql.printStackTrace();
@@ -133,10 +145,10 @@ public class Database {
         
     	try{
     		    		
-    		String query = 	"DELETE FROM persona"+
+    		String query = 	"DELETE FROM persona "+
     						"WHERE id = "+ id;
     					     				
-    		resultSet = statement.executeQuery(query);
+    		statement.execute(query);
     		
     	}catch(SQLException sql){    		
     		sql.printStackTrace();
@@ -145,6 +157,38 @@ public class Database {
             connect.close();
         }    	
     }
+	
+	
+	
+	//ritorna il contatto nel database
+		public static Persona cercaContatto(int id) throws SQLException  {
+	    	
+	    	inizializza();        
+	    	Persona persona = null;
+	    	try{
+	    		    		
+	    		String query = 	"SELECT * FROM persona"+
+	    						"WHERE id = "+ id;
+	    					     				
+	    		resultSet = statement.executeQuery(query); 
+	    		
+	    		int ide = resultSet.getInt("id");
+	    		String nome = resultSet.getString("nome"); System.out.println(nome);
+	    		String cognome = resultSet.getString("cognome");
+	    		String indirizzo = resultSet.getString("indirizzo");
+	    		String telefono = resultSet.getString("telefono");
+	    		int eta = resultSet.getInt("eta");
+	    		
+	    		persona = new Persona(ide, nome, cognome, indirizzo, telefono, eta);
+	    		
+	    	}catch(SQLException sql){
+	    		sql.printStackTrace();
+	    	}finally {
+	            statement.close();
+	            connect.close();
+	        }
+	    	return persona;
+	    }
 		
 	
 	

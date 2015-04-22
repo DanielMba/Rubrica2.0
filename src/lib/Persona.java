@@ -15,6 +15,14 @@ public class Persona {
 		this.eta = eta;
 	}
 	
+	public Persona(String nome,String cogn, String indir, String tel, int eta){
+		this.nome = nome;
+		this.cognome = cogn;
+		this.indirizzo = indir;
+		this.telefono = tel;
+		this.eta = eta;
+	}
+	
 	public int getId(){ 
 		return id;
 	}
