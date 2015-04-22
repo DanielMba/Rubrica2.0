@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
   <display-name>RubricaTomcat</display-name>
-  
   <welcome-file-list>
     <welcome-file>rubrica</welcome-file>
     <welcome-file>index.htm</welcome-file>
@@ -10,14 +9,12 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
   <resource-ref>
     <description>JDBC</description>
     <res-ref-name>jdbc/rubrica</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
     <res-auth>Container</res-auth>
   </resource-ref>
-  
   <servlet>
     <servlet-name>Contatti</servlet-name>
     <servlet-class>Contatti</servlet-class>
@@ -26,7 +23,6 @@
     <servlet-name>Contatti</servlet-name>
     <url-pattern>/rubrica</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>CreaContatto</servlet-name>
     <servlet-class>CreaContatto</servlet-class>
@@ -35,7 +31,6 @@
     <servlet-name>CreaContatto</servlet-name>
     <url-pattern>/CreaContatto</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>MainServlet</servlet-name>
     <servlet-class>MainServlet</servlet-class>
@@ -44,5 +39,12 @@
     <servlet-name>MainServlet</servlet-name>
     <url-pattern>/MainServlet</url-pattern>
   </servlet-mapping>
-
+   <servlet>
+    <servlet-name>ModificaContatto</servlet-name>
+    <servlet-class>ModificaContatto</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ModificaContatto</servlet-name>
+    <url-pattern>/ModificaContatto</url-pattern>
+  </servlet-mapping>
 </web-app>

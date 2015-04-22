@@ -33,7 +33,7 @@ public class Database {
     	Vector<Persona> vector = new Vector<Persona>();
         
     	try{
-    		String query = 	"SELECT * FROM persona";
+    		String query = 	"SELECT * FROM persona ORDER BY cognome";
     		resultSet = statement.executeQuery(query);
     		
     		
@@ -93,11 +93,9 @@ public class Database {
 	    		prp_statment.setString(4,persona_indirizzo);
 	    		prp_statment.setString(5,persona_telefono);
 	    		prp_statment.setInt(6,persona_eta);	    		
-	    		prp_statment.executeUpdate();   		
-	    		
+	    		prp_statment.executeUpdate();	    		
 	    		
 	    	}catch(SQLException sql){ 
-	    		System.out.println(sql.getMessage());
 	    		sql.printStackTrace();
 	    	}finally {            
 	    		prp_statment.close();
@@ -117,22 +115,23 @@ public class Database {
     		String cognome = p.getCognome();
     		String indirizzo = p.getIndirizzo();
     		String telefono = p.getTelefono();
-    		int eta = p.getEta();    		
+    		int eta = p.getEta();
+    		    		
+    		String query = 	"UPDATE persona SET  nome = ?, cognome = ?, indirizzo = ?, telefono = ?, eta = ? WHERE id = ?";    		
     		
-    		String query = 	"UPDATE persona"+
-    						"SET nome = " + nome +
-    						"cognome = "+ cognome +
-    						"indirizzo = "+ indirizzo +
-    						"telefono = "+ telefono +
-    						"eta = "+ eta + 
-    						"WHERE id = "+ id;
-    					     				
-    		statement.executeUpdate(query);
+    		prp_statment = connect.prepareStatement(query);
+    		prp_statment.setString(1,nome);
+    		prp_statment.setString(2,cognome);
+    		prp_statment.setString(3,indirizzo);
+    		prp_statment.setString(4,telefono);
+    		prp_statment.setInt(5,eta);
+    		prp_statment.setInt(6,id);	    		
+    		prp_statment.executeUpdate();
     		
     	}catch(SQLException sql){    		
     		sql.printStackTrace();
     	}finally {            
-            statement.close();
+    		prp_statment.close();
             connect.close();
         }    	
     }
@@ -167,20 +166,21 @@ public class Database {
 	    	Persona persona = null;
 	    	try{
 	    		    		
-	    		String query = 	"SELECT * FROM persona"+
+	    		String query = 	"SELECT * FROM persona "+
 	    						"WHERE id = "+ id;
 	    					     				
 	    		resultSet = statement.executeQuery(query); 
 	    		
-	    		int ide = resultSet.getInt("id");
-	    		String nome = resultSet.getString("nome"); System.out.println(nome);
-	    		String cognome = resultSet.getString("cognome");
-	    		String indirizzo = resultSet.getString("indirizzo");
-	    		String telefono = resultSet.getString("telefono");
-	    		int eta = resultSet.getInt("eta");
+	    		while(resultSet.next()){
+	    			int ide = resultSet.getInt("id");
+		    		String nome = resultSet.getString("nome");
+		    		String cognome = resultSet.getString("cognome");
+		    		String indirizzo = resultSet.getString("indirizzo");
+		    		String telefono = resultSet.getString("telefono");
+		    		int eta = resultSet.getInt("eta");
 	    		
-	    		persona = new Persona(ide, nome, cognome, indirizzo, telefono, eta);
-	    		
+		    		persona = new Persona(ide, nome, cognome, indirizzo, telefono, eta);
+	    		}
 	    	}catch(SQLException sql){
 	    		sql.printStackTrace();
 	    	}finally {
